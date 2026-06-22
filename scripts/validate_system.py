@@ -917,7 +917,7 @@ def run_pipeline(video_path=None, yolo_path=None, models_dir=None, out_dir=None)
     
     print("="*90)
 
-    # 🔥 СВОДНАЯ ТАБЛИЦА ПО СЕГМЕНТАМ (для ВКР)
+    # 🔥 СВОДНАЯ ТАБЛИЦА ПО СЕГМЕНТАМ 
     print("\n" + "="*90)
     print("📋 СВОДНАЯ ТАБЛИЦА РЕЗУЛЬТАТОВ ПО СЕГМЕНТАМ (ДЛЯ ВКР)")
     print("="*90)
