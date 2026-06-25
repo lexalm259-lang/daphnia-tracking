@@ -24,31 +24,30 @@ notch_height = 2;
 notch_offset = 2;
 
 // ============================================================
-// МОДУЛЬ КРЕПЛЕНИЯ КАМЕРЫ (ОБНОВЛЁННАЯ ВЕРСИЯ)
+// МОДУЛЬ КРЕПЛЕНИЯ КАМЕРЫ (печатается ОТДЕЛЬНО)
 // ============================================================
 module cam_mount(width, D, D_inner, space) {
-     difference() {
+    difference() {
         union() {
+            // Прямоугольная подпорка
             translate([0, 0, D/4+shift_distance/2]) 
-                cube([D, width, D/2+shift_distance], center = true); // Прямоугольная подпорка
+                cube([D, width, D/2+shift_distance], center = true);
             
+            // Цилиндрическая подпорка (для винта)
             translate([0, 0, D/2+shift_distance]) rotate([90,0,0]) 
-                cylinder(h = width, d = D, center = true); // Цилиндрическая подпорка
-            
-            // 🔥 ОБНОВЛЕНИЕ: скруглённое основание крепления камеры
-            linear_extrude(height = 2, center = true)
-                offset(r = 5)
-                square([30 - 2*5, 50 - 2*5], center = true);
+                cylinder(h = width, d = D, center = true);
         };
         
-        translate([0, 0, D/2+shift_distance]) rotate([90,0,00]) 
-            cylinder(h = width + 1, d = D_inner, center = true); // Отверстие для винта
+        // Отверстие для винта
+        translate([0, 0, D/2+shift_distance]) rotate([90,0,0]) 
+            cylinder(h = width + 1, d = D_inner, center = true);
         
+        // Центральный вырез (пропил под шип камеры)
         translate([0, 0, D/2+shift_distance]) 
-            cube([D+EPS, space, D+0.], center = true); // Центральный вырез
-     };
+            cube([D+EPS, space, D], center = true);
+    };
     
-    // Упор
+    // Упор (фиксирует камеру от проворачивания)
     translate([0, width_mount/2 - notch_offset, D_mount/2 - notch_height])
         cube([notch_width, notch_depth, notch_height/2], center = true);
 }
@@ -78,13 +77,15 @@ module hole(length, width) {
 }
 
 // ============================================================
-// СБОРКА: крышка + крепление камеры - отверстие для проводов
+// СБОРКА: крышка + крепление камеры (для визуализации)
+// Примечание: крепление камеры печатается ОТДЕЛЬНОЙ деталью
+// и устанавливается на крышку после печати
 // ============================================================
 difference() {
     union() {
         cap();   // Крышка
         rotate([0, 0, 45]) translate([0, shift_mount, cap_height/2])  
-            cam_mount(width_mount, D_mount, D_inner_mount, dist_mount); // Крепление для камеры
+            cam_mount(width_mount, D_mount, D_inner_mount, dist_mount);
     }
     // Вырез для провода
     translate([-cap_width/2, 0, 0]) hole(2*D_hole, D_hole);
